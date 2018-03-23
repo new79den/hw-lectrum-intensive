@@ -74,6 +74,16 @@
                 display: flex;
                 justify-content: space-between;
                 margin: 0 0 1.3rem;
+                position: relative;
+
+                p{
+                    position: absolute;
+                    color: green;
+                    font-size: 12px;
+                    margin: 0;
+                    top: -20px;
+                    left: 0;
+                }
 
                 input {
                     width: 55rem;
@@ -91,10 +101,14 @@
                     border: 0;
                     cursor: pointer;
                     background-image: url('../../theme/assets/plus-icon.svg');
-                    backgorund-color: white;
                     background-repeat: no-repeat;
                     background-size: 1.8rem 1.8rem;
                     background-position: 6% 50%;
+
+                    &:disabled{
+                        opacity: .3;
+                        cursor: not-allowed;
+                    }
                 }
             }
 
