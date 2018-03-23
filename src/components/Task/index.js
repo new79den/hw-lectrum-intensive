@@ -7,17 +7,27 @@ import Delete from "../../theme/assets/Delete"
 import {string, number, bool} from "prop-types"
 
 
-function Task({id, message, completed, favorites}) {
+function Task({id, message, completed, favorite, changeTasksState}) {
 
+
+    function _changeTasksState(type) {
+
+        const action = {
+            type: type,
+            id: id
+        };
+
+        changeTasksState(action);
+    }
 
     return (
         <li className={Styles.task}>
             <div>
                 <span>
-                    <Checkbox checked = {completed}  color1="#3B8EF3" color2="#fff"/>
+                    <Checkbox onClick={()=>_changeTasksState("COMPLETED")} checked={completed} color1="#3B8EF3" color2="#fff"/>
                 </span>
 
-                <span className = { completed ?  Styles.through: null}>
+                <span className={completed ? Styles.through : null}>
                    {message}
                 </span>
 
@@ -25,9 +35,9 @@ function Task({id, message, completed, favorites}) {
 
 
             <div>
-                <Star color1="#3B8EF3" color2="#000"/>
+                <Star checked = {favorite} onClick={()=>_changeTasksState("FAVORITE")} color1="#3B8EF3" color2="#000"/>
                 <Edit color1="#3B8EF3" color2="#000"/>
-                <Delete color1="#3B8EF3" color2="#000"/>
+                <Delete  onClick={()=>_changeTasksState("DELETE")} color1="#3B8EF3" color2="#000"/>
             </div>
         </li>
     )

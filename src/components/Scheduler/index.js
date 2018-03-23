@@ -11,6 +11,8 @@ class NewTask {
         this.message = message;
         this.completed = false;
         this.favorite = false;
+        this.created = new Date;
+        this.modified = null;
     }
 
 }
@@ -53,11 +55,64 @@ class Scheduler extends Component {
         }));
     };
 
+    _changeTasksState = ({type, id}) => {
+
+        const {tasks} = this.state;
+
+        switch (type) {
+
+            case "COMPLETED" :
+                const completed = tasks.map((e) => {
+                    if (e.id === id) {
+                        e.completed = !e.completed
+                    }
+                    return e;
+                });
+                this.setState({tasks: completed});
+                break;
+
+            case "FAVORITE" :
+                const favorite = tasks.map((e) => {
+                    if (e.id === id) {
+                        e.favorite = !e.favorite
+                    }
+                    return e;
+                });
+                this.setState({tasks: favorite});
+                break;
+
+            case "DELETE" :
+                const deleteTask = tasks.filter((e) => e.id !== id);
+                this.setState({tasks: deleteTask});
+                break;
+        }
+
+    };
+
+    _filterTasks = (tasks) => {
+        return tasks.sort(((a, b) => {
+
+            let dateA = a.modified || a.created;
+            let dateB = b.modified || b.created;
+
+            dateA = new Date (dateA);
+            dateB = new Date(dateB);
+
+            if (a.favorite && b.favorite) {
+                return dateA < dateB;
+            } else if (b.favorite) {
+                return true
+            }else{
+                return dateA < dateB;
+            }
+
+        }))
+    };
 
     render() {
 
-        const {tasks: tasksData} = this.state;
-
+        let {tasks: tasksData} = this.state;
+        tasksData = this._filterTasks(tasksData);
         const tasks = tasksData.map(task => (
             <Task
                 key={task.id}
@@ -65,6 +120,7 @@ class Scheduler extends Component {
                 message={task.message}
                 completed={task.completed}
                 favorite={task.favorite}
+                changeTasksState={this._changeTasksState}
             />
         ));
 
