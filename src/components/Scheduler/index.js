@@ -95,15 +95,28 @@ class Scheduler extends Component {
             let dateA = a.modified || a.created;
             let dateB = b.modified || b.created;
 
-            dateA = new Date (dateA);
+            dateA = new Date(dateA);
             dateB = new Date(dateB);
 
-            if (a.favorite && b.favorite) {
-                return dateA < dateB;
-            } else if (b.favorite) {
-                return true
-            }else{
-                return dateA < dateB;
+            if ((a.favorite || b.favorite) && (!a.completed && !b.completed)) {
+
+                if (a.favorite && b.favorite)  return dateB > dateA ? 1 : -1;
+                if (a.favorite && !b.favorite) return -1;
+                if (!a.favorite && b.favorite) return 1;
+
+            } else if (a.completed || b.completed) {
+
+                if (a.completed && b.completed) {
+
+                    if (!a.favorite && b.favorite) return 1;
+                    if (a.favorite && !b.favorite) return -1;
+                    return dateB > dateA ? 1 : -1;
+                }
+                if (a.completed && !b.completed) return 1;
+                if (!a.completed && b.completed) return -1;
+
+            } else{
+                return dateB > dateA ? 1 : -1;
             }
 
         }))
