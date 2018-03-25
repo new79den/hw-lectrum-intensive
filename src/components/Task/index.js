@@ -1,4 +1,4 @@
-import React from "react"
+import React, {Component} from "react"
 import Styles from "./styles.scss"
 import Checkbox from "../../theme/assets/Checkbox"
 import Star from "../../theme/assets/Star"
@@ -7,42 +7,132 @@ import Delete from "../../theme/assets/Delete"
 import {string, number, bool} from "prop-types"
 
 
-function Task({id, message, completed, favorite, changeTasksState}) {
+class Task extends Component {
 
+    state = {
+        isShowEdit: false,
+        editMessage: ""
+    };
 
-    function _changeTasksState(type) {
+    _changeGlobalStateTasks = (type) => {
+
+        const {id, changeGlobalStateTasks, message} = this.props;
+
+        const {editMessage} = this.state;
+
 
         const action = {
             type: type,
-            id: id
+            id: id,
+            value: editMessage.trim() ? editMessage : message
         };
 
-        changeTasksState(action);
+        changeGlobalStateTasks(action);
+    };
+
+    _handleEditField = () => {
+        const {isShowEdit} = this.state;
+
+        if (this.props.completed) return false;
+
+        if (isShowEdit) {
+            this._changeGlobalStateTasks("EDIT");
+
+        } else {
+
+            this.setState({
+                editMessage: this.props.message
+            })
+        }
+
+        this.setState({
+            isShowEdit: !this.state.isShowEdit
+        })
+
+    };
+
+    _editMessage = (event) => {
+
+        const value = event.target.value;
+
+
+        if (value.length > 46) return false;
+
+        this.setState({
+            editMessage: value
+        })
+
+    };
+
+    _escFunction = (event) => {
+
+        if (event.keyCode === 27) this._resetState();
+    };
+
+    _resetState = () => {
+        this.setState({
+            editMessage: "",
+            isShowEdit: false
+        });
+    };
+
+    componentWillReceiveProps() {
+        this._resetState();
     }
 
-    return (
-        <li className={Styles.task}>
-            <div>
+    componentDidMount() {
+        document.addEventListener("keydown", this._escFunction, false);
+
+    }
+
+    componentWillUnmount() {
+        document.removeEventListener("keydown", this._escFunction, false);
+
+    }
+
+
+    render() {
+
+        const {completed, favorite, message} = this.props;
+        const {isShowEdit, editMessage} = this.state;
+
+        const taskStyles = completed
+            ? `${Styles.task} ${Styles.completed}`
+            : Styles.task;
+
+        return (
+            <li className={taskStyles}>
+                <div>
                 <span>
-                    <Checkbox onClick={()=>_changeTasksState("COMPLETED")} checked={completed} color1="#3B8EF3" color2="#fff"/>
+
+                        <Checkbox onClick={() => this._changeGlobalStateTasks("COMPLETED")} checked={completed}
+                                  color1="#3B8EF3"
+                                  color2="#fff"/>
+
                 </span>
 
-                <span className={completed ? Styles.through : null}>
-                   {message}
-                </span>
+                    {
+                        isShowEdit
+                            ?
+                            <input placeholder="введите текст" onChange={this._editMessage} type="text"
+                                   value={editMessage}/>
+                            :
+                            <span className={completed ? Styles.through : null}>{message}</span>
+                    }
 
-            </div>
+                </div>
 
+                <div>
+                    <Star checked={favorite} onClick={() => this._changeGlobalStateTasks("FAVORITE")} color1="#3B8EF3"
+                          color2="#000"/>
+                    <Edit onClick={this._handleEditField} color1="#3B8EF3" color2={isShowEdit ? "#3B8EF3" : "#000"}/>
+                    <Delete onClick={() => this._changeGlobalStateTasks("DELETE")} color1="#3B8EF3" color2="#000"/>
+                </div>
+            </li>
+        )
+    }
 
-            <div>
-                <Star checked = {favorite} onClick={()=>_changeTasksState("FAVORITE")} color1="#3B8EF3" color2="#000"/>
-                <Edit color1="#3B8EF3" color2="#000"/>
-                <Delete  onClick={()=>_changeTasksState("DELETE")} color1="#3B8EF3" color2="#000"/>
-            </div>
-        </li>
-    )
 }
-
 
 Task.propTypes = {
     id: string.isRequired,
