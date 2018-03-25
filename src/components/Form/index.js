@@ -4,7 +4,7 @@ import {func} from "prop-types"
 class Form extends Component {
 
     static propTypes = {
-        addTask: func.isRequired
+        changeGlobalStateTasks: func.isRequired
     };
 
     state = {
@@ -17,7 +17,7 @@ class Form extends Component {
         if (message.length > 46) return false;
 
         this.setState(() => ({
-            message: message.trim()
+            message: message
         }))
     };
 
@@ -25,10 +25,19 @@ class Form extends Component {
 
         event.preventDefault();
 
-        const {addTask} = this.props;
+
+        const {changeGlobalStateTasks} = this.props;
         const {message} = this.state;
 
-        addTask(message);
+        if (!message.trim()) return false;
+
+        const action = {
+            type: "ADD",
+            value: message
+        };
+
+
+        changeGlobalStateTasks(action);
 
         this.setState(() => ({
             message: ""
@@ -55,7 +64,7 @@ class Form extends Component {
                     <input value={message} onChange={this._setMessage} type="text"/>
                 </div>
 
-                <button disabled={!message} onClick={this._addTask}>Добавить задачу</button>
+                <button disabled={!message.trim()} onClick={this._addTask}>Добавить задачу</button>
             </form>
         )
     }

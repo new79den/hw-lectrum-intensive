@@ -66,18 +66,19 @@ class Task extends Component {
 
     _escFunction = (event) => {
 
-        if (event.keyCode === 27) this._resetState();
-    };
 
-    _resetState = () => {
+        if (event.keyCode === 27) this._resetState();
+    }
+
+    _resetState = () =>{
         this.setState({
             editMessage: "",
             isShowEdit: false
         });
     };
 
-    componentWillReceiveProps() {
-        this._resetState();
+    componentWillReceiveProps(){
+       this._resetState();
     }
 
     componentDidMount() {
@@ -89,6 +90,7 @@ class Task extends Component {
         document.removeEventListener("keydown", this._escFunction, false);
 
     }
+
 
 
     render() {

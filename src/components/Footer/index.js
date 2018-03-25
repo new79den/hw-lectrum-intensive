@@ -9,24 +9,14 @@ class Footer extends Component {
         isCheckAll: bool.isRequired
     };
 
-    state = {
-        isCheckboxChecked: this.props.isCheckAll
-    };
 
     _targetCheckbox = () => {
 
-        const {isCheckboxChecked} = this.state;
-        const {changeGlobalStateTasks} = this.props;
-
+        const {changeGlobalStateTasks, isCheckAll} = this.props;
         const action = {
             type: "CHANGE_ALL",
-            value: !isCheckboxChecked
+            value: !isCheckAll
         };
-
-        this.setState(({isCheckboxChecked}) => ({
-            isCheckboxChecked: !isCheckboxChecked
-        }));
-
 
         changeGlobalStateTasks(action)
 
@@ -34,11 +24,10 @@ class Footer extends Component {
 
     render() {
 
-        const {isCheckboxChecked} = this.state;
-
+        const {isCheckAll} = this.props;
         return (
             <footer>
-                <Checkbox onClick={this._targetCheckbox} checked={isCheckboxChecked} color1="#000" color2="#f5f5f5"/>
+                <Checkbox onClick={this._targetCheckbox} checked={isCheckAll} color1="#000" color2="#f5f5f5"/>
                 <span>Все задачи выполнены</span>
 
             </footer>
