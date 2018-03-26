@@ -4,6 +4,7 @@ import Task from '../Task';
 import Form from '../Form';
 import Footer from "../Footer"
 import Search from "../Search";
+import {string} from "prop-types"
 
 class NewTask {
 
@@ -20,33 +21,14 @@ class NewTask {
 
 class Scheduler extends Component {
 
+    static contextTypes = {
+        api: string.isRequired,
+        authorization: string.isRequired
+    };
+
     state = {
         searchText: '',
-
-        tasks: [
-            /*  {
-                  "id": "5a7f136231a5d90001271637",
-                  "message": "Hello Denis!",
-                  "completed": true,
-                  "favorite": false,
-                  "created": "2018-02-10T15:44:34.624Z",
-                  "modified": "2018-02-10T16:01:12.406Z"
-              },
-              {
-                  "id": "5a7f136131a5d90001271636",
-                  "message": "it my task",
-                  "completed": false,
-                  "favorite": false,
-                  "created": "2018-02-10T15:44:33.675Z"
-              },
-              {
-                  "id": "5a7f136031a5d90001271635",
-                  "message": "Hello",
-                  "completed": false,
-                  "favorite": true,
-                  "created": "2018-02-10T15:44:32.959Z"
-              }*/
-        ]
+        tasks: []
     };
 
     _setSearchText = (e) => {
@@ -56,15 +38,13 @@ class Scheduler extends Component {
     };
 
 
-
-
     _saveAndUpdateTasksInLocalStorage = () => {
 
         const arrayToObject = (array) =>
             array.reduce((obj, item) => {
-                obj[item["id"]] = item
+                obj[item["id"]] = item;
                 return obj
-            }, {})
+            }, {});
 
         let {tasks} = this.state;
         tasks = arrayToObject(tasks);
@@ -77,16 +57,52 @@ class Scheduler extends Component {
     _changeGlobalStateTasks = ({type, id, value}) => {
 
         const {tasks} = this.state;
-
         switch (type) {
             case "ADD" :
-                const task = new NewTask(value);
-                this.setState(({tasks}) => ({
-                    tasks: [task, ...tasks]
-                }));
+
+                const {api, authorization} = this.context;
+
+                fetch(api, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': authorization
+                    },
+                    body: JSON.stringify({message: value})
+                }).then(response => {
+                    if (response.status !== 200) {
+                        throw new Error('create post err')
+                    }
+                    return response.json()
+                }).then((res) => {
+
+                    res = res.data;
+                    this.setState(({tasks}) => ({
+                        tasks: [res, ...tasks],
+                    }));
+
+                }).catch((err) => {
+                    console.log(err.message)
+                });
+
+
                 break;
 
             case "DELETE" :
+
+                const {api: api1, authorization: authorization1} = this.context;
+
+
+                fetch(`${api1}/${id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': authorization1
+                    },
+
+                }).catch((err) => {
+                    console.log(err.message)
+                });
+                
                 const deleteTask = tasks.filter((e) => e.id !== id);
                 this.setState({tasks: deleteTask});
 
@@ -136,6 +152,34 @@ class Scheduler extends Component {
 
     };
 
+    _fetchPost = async () => {
+
+        const {api, authorization} = this.context;
+
+        fetch(api, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': authorization
+            }
+        }).then(response => {
+            if (response.status !== 200) {
+                throw new Error('create post err')
+            }
+            return response.json()
+        }).then((res) => {
+
+             res = res.data;
+           this.setState(({tasks}) => ({
+                tasks: [...res, ...tasks],
+            }));
+
+        }).catch((err) => {
+            console.log(err.message)
+        })
+
+    };
+
     _filterTasks = (tasks) => {
         return tasks.sort(((a, b) => {
 
@@ -175,16 +219,19 @@ class Scheduler extends Component {
 
     componentDidMount() {
 
-        let tasks = localStorage.getItem("tasks");
+       /* let tasks = localStorage.getItem("tasks");
         if (!tasks) return false;
         tasks = JSON.parse(tasks);
         tasks = Object.values(tasks);
 
         this.setState({
             tasks: tasks
-        })
+        })*/
+
+        this._fetchPost();
     }
-    componentDidUpdate(){
+
+    componentDidUpdate() {
         this._saveAndUpdateTasksInLocalStorage();
     }
 
