@@ -75,14 +75,10 @@ class Scheduler extends Component {
 
             if (task.completed) countCompletedTasks++;
             return (<Task
-                        key={task.id}
-                        id={task.id}
-                        message={task.message}
-                        completed={task.completed}
-                        favorite={task.favorite}
-                        task={task}
-                        changeGlobalStateTasks={changeGlobalStateTasks}
-                    />
+                    key={task.id}
+                    task={task}
+                    changeGlobalStateTasks={changeGlobalStateTasks}
+                />
             )
         });
 

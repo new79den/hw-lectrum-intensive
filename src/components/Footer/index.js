@@ -13,6 +13,7 @@ class Footer extends Component {
     _targetCheckbox = () => {
 
         const {changeGlobalStateTasks, isCheckAll} = this.props;
+
         const action = {
             type: "CHANGE_ALL",
             value: !isCheckAll

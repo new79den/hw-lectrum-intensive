@@ -15,7 +15,11 @@ const withState = (Injectable) => {
 
 
         _changeGlobalStateTasks = (action) => {
+
+
             const {tasks} = this.state;
+            const {task, value} = action;
+
 
             switch (action.type) {
                 case "ADD" :
@@ -23,12 +27,11 @@ const withState = (Injectable) => {
                     break;
 
                 case "DELETE" :
-                    this._deleteTaskAPI(action.id);
+                    this._deleteTaskAPI(task.id);
                     break;
 
                 case "EDIT" :
-
-                    this._editTaskAPI(action.value);
+                    this._editTaskAPI(task);
                     break;
 
                 case "CHANGE_ALL" :
@@ -37,28 +40,9 @@ const withState = (Injectable) => {
                         e.completed = value;
                         return e;
                     });
-                    this.setState({tasks: changeAll});
+                    this._editTaskAllAPI(changeAll);
                     break;
 
-                case "COMPLETED" :
-                    const completed = tasks.map((e) => {
-                        if (e.id === id) {
-                            e.completed = !e.completed
-                        }
-                        return e;
-                    });
-                    this.setState({tasks: completed});
-                    break;
-
-                case "FAVORITE" :
-                    const favorite = tasks.map((e) => {
-                        if (e.id === id) {
-                            e.favorite = !e.favorite
-                        }
-                        return e;
-                    });
-                    this.setState({tasks: favorite});
-                    break;
             }
 
         };
@@ -162,9 +146,43 @@ const withState = (Injectable) => {
                 return response.json()
             }).then((res) => {
                 res = res.data;
+
+                this._deleteTaskState(editedTask.id);
+
                 this.setState(({tasks}) => ({
-                  //  tasks: [...res, ...tasks],
+                    tasks: [...res, ...tasks],
                 }));
+
+            }).catch((err) => {
+                console.log(err.message)
+            });
+        };
+
+        _editTaskAllAPI = async (editedTask) => {
+
+            const {api, authorization} = this.context;
+
+            fetch(api, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': authorization
+                },
+
+                body: JSON.stringify(editedTask)
+            }).then(response => {
+                if (response.status !== 200) {
+                    throw new Error('create post err')
+                }
+                return response.json()
+            }).then((res) => {
+
+
+                res = res.data;
+                this.setState({
+                    tasks: res
+                });
+
 
             }).catch((err) => {
                 console.log(err.message)

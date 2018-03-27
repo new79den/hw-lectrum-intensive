@@ -16,31 +16,34 @@ class Task extends Component {
 
     _changeGlobalStateTasks = (type) => {
 
-        const {changeGlobalStateTasks, message, task} = this.props;
-
-        const {editMessage} = this.state;
-        Object.assign(task, {message: editMessage.trim() ? editMessage : message});
-
+        const {changeGlobalStateTasks, task} = this.props;
         const action = {
-            type: type,
-            value: task
+            type,
+            task
         };
 
         changeGlobalStateTasks(action);
     };
 
     _handleEditField = () => {
-        const {isShowEdit} = this.state;
+        const {isShowEdit, editMessage} = this.state;
+        const {message} = this.props.task;
 
         if (this.props.completed) return false;
 
-        if (isShowEdit) {
+        if (isShowEdit && editMessage !== message) {
+
+            const {task} = this.props;
+
+            const {editMessage} = this.state;
+            Object.assign(task, {message: editMessage.trim() ? editMessage : task.message});
+
             this._changeGlobalStateTasks("EDIT");
 
         } else {
 
             this.setState({
-                editMessage: this.props.message
+                editMessage: message
             })
         }
 
@@ -50,10 +53,26 @@ class Task extends Component {
 
     };
 
+    _handleEditFavorite = () => {
+
+        const {task} = this.props;
+
+        Object.assign(task, {favorite: !task.favorite});
+        this._changeGlobalStateTasks("EDIT");
+    };
+
+    _handleEditCompleted = () => {
+
+        const {task} = this.props;
+
+        Object.assign(task, {completed: !task.completed});
+        this._changeGlobalStateTasks("EDIT");
+    };
+
+
     _editMessage = (event) => {
 
         const value = event.target.value;
-
 
         if (value.length > 46) return false;
 
@@ -64,20 +83,18 @@ class Task extends Component {
     };
 
     _escFunction = (event) => {
-
-
         if (event.keyCode === 27) this._resetState();
-    }
+    };
 
-    _resetState = () =>{
+    _resetState = () => {
         this.setState({
             editMessage: "",
             isShowEdit: false
         });
     };
 
-    componentWillReceiveProps(){
-       this._resetState();
+    componentWillReceiveProps() {
+        this._resetState();
     }
 
     componentDidMount() {
@@ -91,10 +108,9 @@ class Task extends Component {
     }
 
 
-
     render() {
 
-        const {completed, favorite, message} = this.props;
+        const {completed, favorite, message} = this.props.task;
         const {isShowEdit, editMessage} = this.state;
 
         const taskStyles = completed
@@ -106,7 +122,7 @@ class Task extends Component {
                 <div>
                 <span>
 
-                        <Checkbox onClick={() => this._changeGlobalStateTasks("COMPLETED")} checked={completed}
+                        <Checkbox onClick={() => this._handleEditCompleted()} checked={completed}
                                   color1="#3B8EF3"
                                   color2="#fff"/>
 
@@ -124,7 +140,7 @@ class Task extends Component {
                 </div>
 
                 <div>
-                    <Star checked={favorite} onClick={() => this._changeGlobalStateTasks("FAVORITE")} color1="#3B8EF3"
+                    <Star checked={favorite} onClick={() => this._handleEditFavorite()} color1="#3B8EF3"
                           color2="#000"/>
                     <Edit onClick={this._handleEditField} color1="#3B8EF3" color2={isShowEdit ? "#3B8EF3" : "#000"}/>
                     <Delete onClick={() => this._changeGlobalStateTasks("DELETE")} color1="#3B8EF3" color2="#000"/>
@@ -135,11 +151,5 @@ class Task extends Component {
 
 }
 
-Task.propTypes = {
-    id: string.isRequired,
-    message: string.isRequired,
-    completed: bool.isRequired,
-    favorite: bool.isRequired,
-}
 
 export default Task;
