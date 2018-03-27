@@ -16,15 +16,14 @@ class Task extends Component {
 
     _changeGlobalStateTasks = (type) => {
 
-        const {id, changeGlobalStateTasks, message} = this.props;
+        const {changeGlobalStateTasks, message, task} = this.props;
 
         const {editMessage} = this.state;
-
+        Object.assign(task, {message: editMessage.trim() ? editMessage : message});
 
         const action = {
             type: type,
-            id: id,
-            value: editMessage.trim() ? editMessage : message
+            value: task
         };
 
         changeGlobalStateTasks(action);
