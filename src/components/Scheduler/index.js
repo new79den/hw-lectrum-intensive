@@ -6,6 +6,7 @@ import Footer from "../Footer"
 import Search from "../Search";
 import {string} from "prop-types"
 import withState from "../witchState";
+import {CSSTransition, TransitionGroup, Transition} from "react-transition-group"
 
 
 class Scheduler extends Component {
@@ -74,11 +75,25 @@ class Scheduler extends Component {
         let tasks = tasksData.map(task => {
 
             if (task.completed) countCompletedTasks++;
-            return (<Task
+            return (
+
+                <CSSTransition
+                    classNames={{
+                        enter: Styles.postInStart,
+                        enterActive: Styles.postInEnd,
+                        exit: Styles.postOutStart,
+                        exitActive: Styles.postOutEnd
+
+                    }}
                     key={task.id}
-                    task={task}
-                    changeGlobalStateTasks={changeGlobalStateTasks}
-                />
+                    timeout={{enter:200,exit:200}}
+                >
+                    <Task
+                        key={task.id}
+                        task={task}
+                        changeGlobalStateTasks={changeGlobalStateTasks}
+                    />
+                </CSSTransition>
             )
         });
 
@@ -92,7 +107,9 @@ class Scheduler extends Component {
                     <section>
                         <Form changeGlobalStateTasks={changeGlobalStateTasks}/>
                         <ul>
-                            {tasks}
+                            <TransitionGroup>
+                                {tasks}
+                            </TransitionGroup>
                         </ul>
 
                     </section>
