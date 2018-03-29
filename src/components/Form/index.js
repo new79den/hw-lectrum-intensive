@@ -25,7 +25,6 @@ class Form extends Component {
 
         event.preventDefault();
 
-
         const {changeGlobalStateTasks} = this.props;
         const {message} = this.state;
 

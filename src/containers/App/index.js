@@ -1,6 +1,7 @@
 // Core
 import React, { Component } from 'react';
 import {string} from "prop-types"
+import Catcher from "../../components/Catcher"
 
 // Components
 import Scheduler from 'components/Scheduler';
@@ -26,7 +27,9 @@ export default class App extends Component {
 
     render () {
       return (
+          <Catcher>
           <Scheduler/>
+          </Catcher>
       )
     }
 }

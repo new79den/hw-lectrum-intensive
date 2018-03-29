@@ -6,6 +6,7 @@ import Footer from "../Footer"
 import Search from "../Search";
 import {string} from "prop-types"
 import withState from "../witchState";
+import Catcher from "../Catcher"
 import {CSSTransition, TransitionGroup, Transition} from "react-transition-group"
 
 
@@ -88,11 +89,13 @@ class Scheduler extends Component {
                     key={task.id}
                     timeout={{enter:200,exit:200}}
                 >
+                    <Catcher key={task.id}>
                     <Task
                         key={task.id}
                         task={task}
                         changeGlobalStateTasks={changeGlobalStateTasks}
                     />
+                    </Catcher>
                 </CSSTransition>
             )
         });
@@ -114,8 +117,10 @@ class Scheduler extends Component {
 
                     </section>
 
-                    <Footer isCheckAll={countCompletedTasks === tasks.length}
-                            changeGlobalStateTasks={changeGlobalStateTasks}/>
+                    {tasks.length
+                        ?  <Footer isCheckAll={countCompletedTasks === tasks.length}
+                                             changeGlobalStateTasks={changeGlobalStateTasks}/>
+                        : null}
 
                 </main>
 
