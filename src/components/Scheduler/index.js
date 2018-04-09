@@ -1,31 +1,26 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import Styles from './styles.scss';
 import Task from '../Task';
 import Form from '../Form';
-import Footer from "../Footer"
-import Search from "../Search";
-import {string} from "prop-types"
-import withState from "../witchState";
-import Catcher from "../Catcher"
-import {CSSTransition, TransitionGroup, Transition} from "react-transition-group"
-
+import Footer from '../Footer';
+import Search from '../Search';
+import withState from '../witchState';
+import Catcher from '../Catcher';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
 class Scheduler extends Component {
-
-
     state = {
         searchText: '',
     };
 
     _setSearchText = (e) => {
         this.setState({
-            searchText: e.target.value
-        })
+            searchText: e.target.value,
+        });
     };
 
-
-    _filterTasks = (tasks) => {
-        return tasks.sort(((a, b) => {
+    _filterTasks (tasks) {
+        return tasks.sort((a, b) => {
 
             let dateA = a.modified || a.created;
             let dateB = b.modified || b.created;
@@ -36,96 +31,113 @@ class Scheduler extends Component {
             if ((a.favorite || b.favorite) && (!a.completed && !b.completed)) {
 
                 if (a.favorite && b.favorite) return dateB > dateA ? 1 : -1;
-                if (a.favorite && !b.favorite) return -1;
-                if (!a.favorite && b.favorite) return 1;
+                if (a.favorite && !b.favorite) {
+                    return -1;
+                }
+                if (!a.favorite && b.favorite) {
+                    return 1;
+                }
 
             } else if (a.completed || b.completed) {
 
                 if (a.completed && b.completed) {
+                    if (!a.favorite && b.favorite) {
+                        return 1;
+                    }
+                    if (a.favorite && !b.favorite) {
+                        return -1;
+                    }
 
-                    if (!a.favorite && b.favorite) return 1;
-                    if (a.favorite && !b.favorite) return -1;
                     return dateB > dateA ? 1 : -1;
                 }
-                if (a.completed && !b.completed) return 1;
-                if (!a.completed && b.completed) return -1;
+                if (a.completed && !b.completed) {
+                    return 1;
+                }
+                if (!a.completed && b.completed) {
+                    return -1;
+                }
 
             } else {
                 return dateB > dateA ? 1 : -1;
             }
 
-        }))
-    };
+            return false;
+        });
+    }
 
-    _filterSearch = (task) => {
-        return task.filter((e) => e.message.toLocaleLowerCase().includes(this.state.searchText.toLocaleLowerCase()))
-    };
+    _filterSearch (task) {
+        return task.filter((e) => e.message.toLocaleLowerCase().includes(this.state.searchText.toLocaleLowerCase()));
+    }
 
+    render () {
 
-    render() {
-
-        let {searchText} = this.state;
-        const {changeGlobalStateTasks} = this.props;
-        let {tasks: tasksData} = this.props;
+        const { searchText } = this.state;
+        const { changeGlobalStateTasks } = this.props;
+        let { tasks: tasksData } = this.props;
 
         tasksData = this._filterTasks(tasksData);
         tasksData = this._filterSearch(tasksData);
 
         let countCompletedTasks = 0;
 
-        let tasks = tasksData.map(task => {
+        const tasks = tasksData.map((task) => {
 
-            if (task.completed) countCompletedTasks++;
+            if (task.completed) {
+                countCompletedTasks += countCompletedTasks;
+            }
+
             return (
-
                 <CSSTransition
-                    classNames={{
-                        enter: Styles.postInStart,
+                    classNames = { {
+                        enter:       Styles.postInStart,
                         enterActive: Styles.postInEnd,
-                        exit: Styles.postOutStart,
-                        exitActive: Styles.postOutEnd
-
-                    }}
-                    key={task.id}
-                    timeout={{enter:200,exit:200}}
-                >
-                    <Catcher key={task.id}>
-                    <Task
-                        key={task.id}
-                        task={task}
-                        changeGlobalStateTasks={changeGlobalStateTasks}
-                    />
+                        exit:        Styles.postOutStart,
+                        exitActive:  Styles.postOutEnd,
+                    } }
+                    key = { task.id }
+                    timeout = { { enter: 200, exit: 200 } }>
+                    <Catcher key = { task.id }>
+                        <Task
+                            changeGlobalStateTasks = { changeGlobalStateTasks }
+                            key = { task.id }
+                            task = { task }
+                        />
                     </Catcher>
                 </CSSTransition>
-            )
+            );
         });
 
         return (
-            <div className={Styles.scheduler}>
+            <div className = { Styles.scheduler }>
                 <main>
                     <header>
                         <h1>Планировщик задач</h1>
-                        <Search setSearchText={this._setSearchText} searchText={searchText}/>
+                        <Search searchText = { searchText } setSearchText = { this._setSearchText } />
                     </header>
                     <section>
-                        <Form changeGlobalStateTasks={changeGlobalStateTasks}/>
+                        <Form changeGlobalStateTasks = { changeGlobalStateTasks } />
                         <ul>
                             <TransitionGroup>
-                                {tasks}
+                                { tasks }
                             </TransitionGroup>
                         </ul>
 
                     </section>
 
                     {tasks.length
-                        ?  <Footer isCheckAll={countCompletedTasks === tasks.length}
-                                             changeGlobalStateTasks={changeGlobalStateTasks}/>
-                        : null}
+                        ?
+                        <Footer
+                            changeGlobalStateTasks = { changeGlobalStateTasks }
+                            isCheckAll = { countCompletedTasks === tasks.length }
+                        />
+                        :
+                        null
+                    }
 
                 </main>
 
             </div>
-        )
+        );
     }
 }
 

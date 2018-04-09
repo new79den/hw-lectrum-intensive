@@ -1,33 +1,33 @@
-import React, {Component} from "react"
-import {object} from "prop-types"
-import Styles from "./style.scss"
+import React, { Component } from 'react';
+import { object } from 'prop-types';
+import Styles from './style.scss';
 
 class Catcher extends Component {
     static propTypes = {
-        children: object.isRequired
-    }
+        children: object.isRequired,
+    };
 
     state = {
-        err: false
-    }
+        err: false,
+    };
 
-    componentDidCatch(error, stack) {
+    componentDidCatch () {
         this.setState({
-            err: true
-        })
+            err: true,
+        });
     }
 
-    render() {
-        const {err} = this.state;
-        const {children} = this.props;
+    render () {
+        const { err } = this.state;
+        const { children } = this.props;
 
         if (err) {
-            return   <section className = { Styles.catcher }>
+            return (<section className = { Styles.catcher }>
                 <span>Sorry! We have some problem :(</span>
-            </section>
+            </section>);
         }
-        return children;
 
+        return children;
     }
 }
 

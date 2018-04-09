@@ -1,17 +1,21 @@
-import React from "react"
-import {func, string} from "prop-types"
+import React from 'react';
+import { func, string } from 'prop-types';
 
 
-function Search({setSearchText, searchText}) {
+function Search ({ setSearchText, searchText }) {
+
     return (
-        <input onChange={setSearchText}  value={searchText}  type="text"/>
-
-    )
+        <input
+            type = 'text'
+            value = { searchText }
+            onChange = { setSearchText }
+        />
+    );
 }
 
 Search.propoTypes = {
     setSearchText: func.isRequired,
-    searchText: string.isRequired
+    searchText:    string.isRequired,
 };
 
 export default Search;
