@@ -12,7 +12,7 @@ class Task extends Component {
     };
 
     componentDidMount () {
-        document.addEventListener('keydown', this._escFunction, false);
+        document.addEventListener('keydown', this._handleKeyPress, false);
     }
 
     componentWillReceiveProps () {
@@ -20,7 +20,7 @@ class Task extends Component {
     }
 
     componentWillUnmount () {
-        document.removeEventListener('keydown', this._escFunction, false);
+        document.removeEventListener('keydown', this._handleKeyPress, false);
     }
 
     _changeGlobalStateTasks = (type) => {
@@ -35,16 +35,14 @@ class Task extends Component {
 
     _handleEditField = () => {
         const { isShowEdit, editMessage } = this.state;
-        const { message } = this.props.task;
+        const { message, completed } = this.props.task;
 
-        if (this.props.completed) {
-
+        if (!completed) {
             if (isShowEdit && editMessage !== message) {
                 const { task } = this.props;
 
                 Object.assign(task, { message: editMessage.trim() ? editMessage : task.message });
                 this._changeGlobalStateTasks('EDIT');
-
             } else {
                 this.setState({
                     editMessage: message,
@@ -74,16 +72,20 @@ class Task extends Component {
     _editMessage = (event) => {
         const value = event.target.value;
 
-        if (value.length > 46) {
+        if (value.length <= 46) {
             this.setState({
                 editMessage: value,
             });
         }
     };
 
-    _escFunction = (event) => {
-        if (event.keyCode === 27) {
+    _handleKeyPress = (event) => {
+        if (event.key === 'Escape') {
             this._resetState();
+        }
+
+        if (event.key === 'Enter' && this.state.isShowEdit) {
+            this._handleEditField();
         }
     };
 
@@ -141,7 +143,7 @@ class Task extends Component {
                     />
                 </div>
             </li>
-        );
+        )
     }
 
 }

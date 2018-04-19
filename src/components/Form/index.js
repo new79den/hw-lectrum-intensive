@@ -13,8 +13,7 @@ class Form extends Component {
     _setMessage = (event) => {
         const message = event.target.value;
 
-        if (message.length > 46) {
-
+        if (message.length <= 46) {
             this.setState(() => ({
                 message,
             }));
@@ -26,7 +25,7 @@ class Form extends Component {
         const { changeGlobalStateTasks } = this.props;
         const { message } = this.state;
 
-        if (!message.trim()) {
+        if (message.trim()) {
             const action = {
                 type:  'ADD',
                 value: message,

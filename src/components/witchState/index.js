@@ -38,9 +38,9 @@ const withState = (Injectable) => {
 
                     changeAll = tasks.map((e) => {
                         e.completed = value;
-
                         return e;
                     });
+
                     this._editTaskAllAPI(changeAll);
                     break;
 

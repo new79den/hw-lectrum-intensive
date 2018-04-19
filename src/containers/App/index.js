@@ -4,7 +4,7 @@ import { string } from 'prop-types';
 import Catcher from '../../components/Catcher';
 
 // Components
-import Scheduler from 'components/Scheduler';
+import SchedulerComponent from '../../components/Scheduler/Scheduler.component';
 
 const option = {
     api:           'https://lab.lectrum.io/hw/todo/api',
@@ -29,7 +29,7 @@ export default class App extends Component {
 
         return (
             <Catcher>
-                <Scheduler />
+                <SchedulerComponent />
             </Catcher>
         );
     }
