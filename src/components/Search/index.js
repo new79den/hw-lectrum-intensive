@@ -1,21 +1,40 @@
-import React from 'react';
-import { func, string } from 'prop-types';
+import React, {Component} from 'react';
+import {connect} from "react-redux"
+import { bindActionCreators } from 'redux'
+import {taskAction} from "../../bus/search/actions";
 
 
-function Search ({ setSearchText, searchText }) {
+class Search extends Component {
+    _changeText = (e) => {
+        this.props.actions.changeText(e.target.value)
+    };
 
-    return (
-        <input
-            type = 'text'
-            value = { searchText }
-            onChange = { setSearchText }
-        />
-    );
+    render() {
+
+        const {searchText} = this.props;
+
+        return (
+            <input
+                type='text'
+                value={searchText}
+                onChange={ this._changeText }
+            />
+        );
+    }
 }
 
-Search.propoTypes = {
-    setSearchText: func.isRequired,
-    searchText:    string.isRequired,
+const mapStateToProps = (state) => {
+    return {
+        searchText: state.search
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        actions: bindActionCreators({
+            changeText: taskAction.changeText,
+        }, dispatch)
+    }
 };
 
-export default Search;
+export default connect(mapStateToProps, mapDispatchToProps)(Search);

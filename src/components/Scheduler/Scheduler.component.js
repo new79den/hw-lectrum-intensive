@@ -10,7 +10,7 @@ import { taskAction } from '../../bus/tasks/actions';
 // Components
 import Task from '../Task';
 import Catcher from '../Catcher';
-import Search from '../Search';
+import Search from "../Search"
 import Form from '../Form';
 import Footer from '../Footer';
 
@@ -42,28 +42,12 @@ export const filterSearch = (tasks, searchText) => {
 
 
 class SchedulerComponent extends Component {
-
-    state = {
-        searchText: '',
-    };
-
-    _setSearchText = (e) => {
-        this.setState({
-            searchText: e.target.value,
-        });
-    };
-
     componentDidMount () {
         this.props.actions.fetchTasks();
     }
 
     render () {
-        const { searchText } = this.state;
-        let { tasks: tasksData, actions } = this.props;
-
-        tasksData = filterTasks(tasksData);
-        tasksData = filterSearch(tasksData, this.state.searchText);
-
+        const { tasks: tasksData, actions } = this.props;
         let countCompletedTasks = 0;
 
         const tasks = tasksData.map((task) => {
@@ -97,7 +81,7 @@ class SchedulerComponent extends Component {
             <main>
                 <header>
                     <h1>Планировщик задач</h1>
-                    <Search searchText={searchText} setSearchText={this._setSearchText}/>
+                    <Search/>
                 </header>
                 <section>
                     <Form addTask={actions.addTask}/>
@@ -120,8 +104,10 @@ class SchedulerComponent extends Component {
 }
 
 const mapStateToProps = (state) =>{
+    const filterTasksByPriority = filterTasks(state.tasks);
+    const filterTasksBySearchText = filterSearch(filterTasksByPriority, state.search);
     return {
-        tasks: state.tasks
+        tasks: filterTasksBySearchText,
     }
 };
 
