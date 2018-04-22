@@ -3,20 +3,15 @@ import { func, bool } from 'prop-types';
 import Checkbox from '../../theme/assets/Checkbox';
 
 class Footer extends Component {
-    static propTypes = {
+/*    static propTypes = {
         changeGlobalStateTasks: func.isRequired,
         isCheckAll:             bool.isRequired,
-    };
+    };*/
 
     _targetCheckbox = () => {
-        const { changeGlobalStateTasks, isCheckAll } = this.props;
+        const { chooseAllTask, isCheckAll } = this.props;
 
-        const action = {
-            type:  'CHANGE_ALL',
-            value: !isCheckAll,
-        };
-
-        changeGlobalStateTasks(action);
+        chooseAllTask(!isCheckAll);
     };
 
     render () {

@@ -2,9 +2,6 @@ import React, { Component } from 'react';
 import { func } from 'prop-types';
 
 class Form extends Component {
-    static propTypes = {
-        changeGlobalStateTasks: func.isRequired,
-    };
 
     state = {
         message: '',
@@ -22,17 +19,12 @@ class Form extends Component {
 
     _addTask = (event) => {
         event.preventDefault();
-        const { changeGlobalStateTasks } = this.props;
         const { message } = this.state;
+        const { addTask } = this.props;
 
         if (message.trim()) {
-            const action = {
-                type:  'ADD',
-                value: message,
-            };
 
-            changeGlobalStateTasks(action);
-
+            addTask(message);
             this.setState(() => ({
                 message: '',
             }));

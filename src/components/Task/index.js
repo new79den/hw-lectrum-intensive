@@ -23,43 +23,39 @@ class Task extends Component {
         document.removeEventListener('keydown', this._handleKeyPress, false);
     }
 
-    _changeGlobalStateTasks = (type) => {
-        const { changeGlobalStateTasks, task } = this.props;
-        const action = {
-            type,
-            task,
-        };
-
-        changeGlobalStateTasks(action);
-    };
-
     _handleEditField = () => {
         const { isShowEdit, editMessage } = this.state;
-        const { message, completed } = this.props.task;
-
+        const { task } = this.props;
+        const completed = task.get('completed');
+        const message = task.get('message');
         if (!completed) {
             if (isShowEdit && editMessage !== message) {
-                const { task } = this.props;
-
-                Object.assign(task, { message: editMessage.trim() ? editMessage : task.message });
-                this._changeGlobalStateTasks('EDIT');
+                this._handleEditTask('message');
             } else {
                 this.setState({
                     editMessage: message,
                 });
             }
-
             this.setState({
                 isShowEdit: !this.state.isShowEdit,
             });
         }
     };
 
-    _handleEditFavorite = () => {
-        const { task } = this.props;
+    _handleEditTask = (field) => {
+        const { task, actions } = this.props;
+        const newTask = {
+            message: field === 'message' ? this.state.editMessage : task.get('message'),
+            id: task.get('id'),
+            completed: field === 'completed' ? !task.get('completed') : task.get('completed'),
+            favorite: field === 'favorite' ? !task.get('favorite') : task.get('favorite'),
+        };
+        actions.editTask(newTask);
+    };
 
-        Object.assign(task, { favorite: !task.favorite });
-        this._changeGlobalStateTasks('EDIT');
+    _deleteTask = () => {
+        const {actions, task} = this.props;
+        actions.deleteTask(task.get('id'));
     };
 
     _handleEditCompleted = () => {
@@ -97,19 +93,19 @@ class Task extends Component {
     };
 
     render () {
-        const { completed, favorite, message } = this.props.task;
+        const { task } = this.props;
         const { isShowEdit, editMessage } = this.state;
-        const taskStyles = completed ? `${Styles.task} ${Styles.completed}` : Styles.task;
+        const taskStyles = task.get('completed') ? `${Styles.task} ${Styles.completed}` : Styles.task;
 
         return (
             <li className = { taskStyles }>
                 <div>
                     <span>
                         <Checkbox
-                            checked = { completed }
+                            checked = { task.get('completed') }
                             color1 = '#3B8EF3'
                             color2 = '#fff'
-                            onClick = { () => this._handleEditCompleted() }
+                            onClick = { () => this._handleEditTask('completed') }
                         />
                     </span>
                     { isShowEdit
@@ -121,15 +117,15 @@ class Task extends Component {
                             onChange = { this._editMessage }
                         />
                         :
-                        <span className = { completed ? Styles.through : null }>{ message }</span>
+                        <span className = { task.get('completed') ? Styles.through : null }>{ task.get('message') }</span>
                     }
                 </div>
                 <div>
                     <Star
-                        checked = { favorite }
+                        checked = { task.get('favorite') }
                         color1 = '#3B8EF3'
                         color2 = '#000'
-                        onClick = { () => this._handleEditFavorite() }
+                        onClick = { () => this._handleEditTask('favorite') }
                     />
                     <Edit
                         color1 = '#3B8EF3'
@@ -139,7 +135,7 @@ class Task extends Component {
                     <Delete
                         color1 = '#3B8EF3'
                         color2 = '#000'
-                        onClick = { () => this._changeGlobalStateTasks('DELETE') }
+                        onClick = { () => this._deleteTask() }
                     />
                 </div>
             </li>
