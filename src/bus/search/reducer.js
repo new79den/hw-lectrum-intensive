@@ -6,6 +6,6 @@ export default (state = initialState, action) => {
     switch (action.type) {
         case types.CHANGE_TEXT :
             return action.payload;
-        default : return state
+        default : return state;
     }
-}
+};

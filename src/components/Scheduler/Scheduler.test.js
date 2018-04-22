@@ -1,23 +1,23 @@
-import React from "react"
-import {configure, mount} from "enzyme"
-import Adapter from "enzyme-adapter-react-16"
-import Scheduler from "./Scheduler.component"
-import {filterTasks} from "./Scheduler.component"
-import {filterSearch} from "./Scheduler.component"
+import React from 'react'
+import {configure, mount} from 'enzyme'
+import Adapter from 'enzyme-adapter-react-16'
+import Scheduler from './Scheduler'
+import {filterTasks} from './Scheduler'
+import {filterSearch} from './Scheduler'
 
 const props = {
     tasks: [{
-        "message": "3",
-        "completed": false,
-        "favorite": false,
+        'message': '3',
+        'completed': false,
+        'favorite': false,
     }, {
-        "message": "2 search",
-        "completed": false,
-        "favorite": false,
+        'message': '2 search',
+        'completed': false,
+        'favorite': false,
     }, {
-        "message": "1",
-        "completed": false,
-        "favorite": false,
+        'message': '1',
+        'completed': false,
+        'favorite': false,
     }]
 };
 
@@ -27,17 +27,17 @@ it('Scheduler: filterTasks: completed', () => {
     tasks[0].completed = true;
     const result = filterTasks(tasks);
     const expected = [{
-        "message": "2 search",
-        "completed": false,
-        "favorite": false,
+        'message': '2 search',
+        'completed': false,
+        'favorite': false,
     }, {
-        "message": "1",
-        "completed": false,
-        "favorite": false,
+        'message': '1',
+        'completed': false,
+        'favorite': false,
     }, {
-        "message": "3",
-        "completed": true,
-        "favorite": false,
+        'message': '3',
+        'completed': true,
+        'favorite': false,
     }];
 
     expect(result).toEqual(expected)
@@ -48,17 +48,17 @@ it('Scheduler: filterTasks: favorite', () => {
     tasks[2].favorite = true;
     const result = filterTasks(tasks);
     const expected = [{
-        "message": "1",
-        "completed": false,
-        "favorite": true,
+        'message': '1',
+        'completed': false,
+        'favorite': true,
     }, {
-        "message": "3",
-        "completed": false,
-        "favorite": false,
+        'message': '3',
+        'completed': false,
+        'favorite': false,
     }, {
-        "message": "2 search",
-        "completed": false,
-        "favorite": false,
+        'message': '2 search',
+        'completed': false,
+        'favorite': false,
     }];
 
     expect(result).toEqual(expected)
@@ -66,11 +66,11 @@ it('Scheduler: filterTasks: favorite', () => {
 
 it('Scheduler: filterSearch', () => {
     const tasks = JSON.parse(JSON.stringify(props.tasks));
-    const result = filterSearch(tasks, "search");
+    const result = filterSearch(tasks, 'search');
     const expected = [{
-        "message": "2 search",
-        "completed": false,
-        "favorite": false,
+        'message': '2 search',
+        'completed': false,
+        'favorite': false,
     }];
 
     expect(result).toEqual(expected);

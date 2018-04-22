@@ -1,24 +1,24 @@
-import {call, put, select} from 'redux-saga/effects';
-import {ROOT_URL, TOKEN} from "../../../../config";
-import {taskAction} from "../../actions";
+import { call, put } from 'redux-saga/effects';
+import { ROOT_URL, TOKEN } from '../../../../config';
+import { taskAction } from '../../actions';
 
-export function* editTaskWorker({payload: task}) {
+export function* editTaskWorker ({ payload: task }) {
     try {
         const response = yield call(fetch, ROOT_URL, {
-            method: 'PUT',
+            method:  'PUT',
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: TOKEN,
+                Authorization:  TOKEN,
             },
-            body: JSON.stringify([task])
+            body: JSON.stringify([task]),
         });
 
-        const {data, message} = yield call([response, response.json]);
+        const { data, message } = yield call([response, response.json]);
 
         if (response.status !== 200) {
-            throw new Error(message)
+            throw new Error(message);
         }
-        yield put(taskAction.editTaskSuccess(data[0]))
+        yield put(taskAction.editTaskSuccess(data[0]));
     } catch (error) {
     } finally {
     }

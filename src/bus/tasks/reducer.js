@@ -1,5 +1,5 @@
 //Core
-import {List, fromJS} from "immutable";
+import { List, fromJS } from 'immutable';
 // Instruments
 import types from './types';
 
@@ -15,12 +15,13 @@ export default (state = initialState, action) => {
             return state.unshift(fromJS(action.payload));
 
         case types.DELETE_TASK_SUCCESS:
-            return state.filter(el => el.get('id') !== action.payload);
+            return state.filter((el) => el.get('id') !== action.payload);
 
         case types.EDIT_TASK_SUCCESS:
-            const indexOfListToUpdate = state.findIndex(el => el.get('id') === action.payload.id);
-            return state.update(indexOfListToUpdate, el => {
-                return el.set("message", action.payload.message)
+            const indexOfListToUpdate = state.findIndex((el) => el.get('id') === action.payload.id);
+
+            return state.update(indexOfListToUpdate, (el) => {
+                return el.set('message', action.payload.message)
                     .set('completed', action.payload.completed)
                     .set('favorite', action.payload.favorite)
                     .set('modified', action.payload.modified);
@@ -30,6 +31,6 @@ export default (state = initialState, action) => {
             return state.merge(fromJS(action.payload));
 
         default:
-            return state
+            return state;
     }
-}
+};

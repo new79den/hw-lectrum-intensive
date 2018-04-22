@@ -1,8 +1,8 @@
-import types from "./types";
+import types from './types';
 
 export const taskAction = Object.freeze({
     changeText: (text) => ({
-        type: types.CHANGE_TEXT,
-        payload: text
-    })
+        type:    types.CHANGE_TEXT,
+        payload: text,
+    }),
 });

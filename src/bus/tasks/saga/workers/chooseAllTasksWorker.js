@@ -1,37 +1,40 @@
-import {call, put, select} from 'redux-saga/effects';
-import {ROOT_URL, TOKEN} from "../../../../config";
-import {taskAction} from "../../actions";
+import { call, put, select } from 'redux-saga/effects';
+import { ROOT_URL, TOKEN } from '../../../../config';
+import { taskAction } from '../../actions';
 
-export function* chooseAllTasksWorker({payload: status}) {
+export function* chooseAllTasksWorker ({ payload: status }) {
     const tasks = yield select((state) => state.tasks);
     const obj = [];
-    tasks.forEach(el => {
+
+    tasks.forEach((el) => {
         obj.push({
-            message: el.get('message'),
-            id: el.get('id'),
+            message:   el.get('message'),
+            id:        el.get('id'),
             completed: status,
-            favorite: el.get('favorite')
-        })
+            favorite:  el.get('favorite'),
+        });
     });
 
     try {
         const response = yield call(fetch, ROOT_URL, {
-            method: 'PUT',
+            method:  'PUT',
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: TOKEN,
+                Authorization:  TOKEN,
             },
-            body: JSON.stringify(obj)
+            body: JSON.stringify(obj),
         });
 
-        const {data, message} = yield call([response, response.json]);
+        const { data, message } = yield call([response, response.json]);
 
         if (response.status !== 200) {
-            throw new Error(message)
+            throw new Error(message);
         }
 
         yield put(taskAction.chooseAllTasksSuccess(data));
     } catch (error) {
+
     } finally {
+
     }
 }

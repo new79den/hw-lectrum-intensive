@@ -28,6 +28,7 @@ class Task extends Component {
         const { task } = this.props;
         const completed = task.get('completed');
         const message = task.get('message');
+
         if (!completed) {
             if (isShowEdit && editMessage !== message) {
                 this._handleEditTask('message');
@@ -45,16 +46,18 @@ class Task extends Component {
     _handleEditTask = (field) => {
         const { task, actions } = this.props;
         const newTask = {
-            message: field === 'message' ? this.state.editMessage : task.get('message'),
-            id: task.get('id'),
+            message:   field === 'message' ? this.state.editMessage : task.get('message'),
+            id:        task.get('id'),
             completed: field === 'completed' ? !task.get('completed') : task.get('completed'),
-            favorite: field === 'favorite' ? !task.get('favorite') : task.get('favorite'),
+            favorite:  field === 'favorite' ? !task.get('favorite') : task.get('favorite'),
         };
+
         actions.editTask(newTask);
     };
 
     _deleteTask = () => {
-        const {actions, task} = this.props;
+        const { actions, task } = this.props;
+
         actions.deleteTask(task.get('id'));
     };
 
@@ -139,7 +142,7 @@ class Task extends Component {
                     />
                 </div>
             </li>
-        )
+        );
     }
 
 }

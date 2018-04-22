@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { func } from 'prop-types';
 
 class Form extends Component {
 
