@@ -107,7 +107,7 @@ class SchedulerComponent extends Component {
 
 const mapStateToProps = (state) => {
     const filterTasksByPriority = filterTasks(state.tasks);
-    const filterTasksBySearchText = filterSearch(filterTasksByPriority, state.search);
+    const filterTasksBySearchText = filterSearch(filterTasksByPriority, state.forms.search.text);
 
     return {
         tasks: filterTasksBySearchText,
