@@ -54,7 +54,7 @@ class SchedulerComponent extends Component {
         const tasks = tasksData.map((task) => {
 
             if (task.get('completed')) {
-                countCompletedTasks += countCompletedTasks + 1;
+                countCompletedTasks = countCompletedTasks + 1;
             }
 
             return (

@@ -42,7 +42,6 @@ class Form extends Component {
 
     render () {
         const { message } = this.state;
-
         return (
             <form>
                 <div>
