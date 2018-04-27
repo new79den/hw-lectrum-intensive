@@ -23,7 +23,7 @@ class Form extends Component {
 
         if (message.trim()) {
 
-            addTask(message);
+            addTask({"message": message});
             this.setState(() => ({
                 message: '',
             }));

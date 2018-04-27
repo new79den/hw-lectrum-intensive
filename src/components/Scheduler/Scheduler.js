@@ -11,7 +11,7 @@ import { taskAction } from '../../bus/tasks/actions';
 import Task from '../Task';
 import Catcher from '../Catcher';
 import Search from '../Search';
-import Form from '../Form';
+import FormTask from '../FormTask';
 import Footer from '../Footer';
 
 export const filterTasks  = (tasks) => {
@@ -86,7 +86,7 @@ class SchedulerComponent extends Component {
                         <Search />
                     </header>
                     <section>
-                        <Form addTask = { actions.addTask } />
+                        <FormTask addTask = { actions.addTask } />
                         <ul>
                             <TransitionGroup>
                                 { tasks }

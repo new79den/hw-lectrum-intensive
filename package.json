@@ -98,6 +98,7 @@
     ],
     "setupFiles": [
       "<rootDir>/config/polyfills.js",
+      "<rootDir>/config/jest/mocks.js",
       "raf/polyfill"
     ],
     "testMatch": [

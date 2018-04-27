@@ -60,9 +60,9 @@ export const taskAction = Object.freeze({
         type:    types.CHOOSE_ALL_TASKS,
         payload: status,
     }),
-    chooseAllTasksSuccess: (task) => ({
+    chooseAllTasksSuccess: (tasks) => ({
         type:    types.CHOOSE_ALL_TASKS_SUCCESS,
-        payload: task,
+        payload: tasks,
     }),
     chooseAllTaskFail: (error) => ({
         type:    types.CHOOSE_ALL_TASKS_FAIL,
