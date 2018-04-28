@@ -23,8 +23,7 @@ export function* addTaskWorker ({ payload: text }) {
         yield put(taskAction.addTaskSuccess(task));
 
     } catch (error) {
-
-    } finally {
+        yield put(taskAction.addTaskFail(error));
 
     }
 }

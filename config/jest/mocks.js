@@ -1,5 +1,6 @@
 const token = "TEST_TOKEN";
-const errorMessage = 'TEST_SUCCESS_MESSAGE.';
+const errorMessage = 'TEST_ERR_MESSAGE.';
+const successMessage = 'TEST_SUCCESS_MESSAGE.';
 const error = new Error(errorMessage);
 
 const task = {
@@ -76,6 +77,25 @@ const updateTask =
     }
 ;
 
+const responseDataFall = {
+    message: errorMessage
+};
+
+const responseDataSuccess = {
+    data: task,
+    message: successMessage
+};
+
+const fetchResponseSuccess = {
+    status: 200,
+    json: jest.fn(Promise.resolve(responseDataSuccess)),
+};
+
+const fetchResponseFail = {
+    status: 401,
+    json: jest.fn(Promise.resolve(responseDataFall)),
+};
+
 global.__ = {
     token,
     error,
@@ -83,4 +103,8 @@ global.__ = {
     task,
     updateTask,
     chooseAllTasks,
+    responseDataSuccess,
+    fetchResponseSuccess,
+    fetchResponseFail,
+    responseDataFall
 };
