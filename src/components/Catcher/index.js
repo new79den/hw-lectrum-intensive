@@ -1,5 +1,7 @@
+//Core
 import React, { Component } from 'react';
 import { object } from 'prop-types';
+// Instruments
 import Styles from './style.scss';
 
 class Catcher extends Component {

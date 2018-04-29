@@ -1,4 +1,6 @@
+//Core
 import React, { Component } from 'react';
+// Instruments
 import Styles from './styles.scss';
 import Checkbox from '../../theme/assets/Checkbox';
 import Star from '../../theme/assets/Star';
@@ -137,8 +139,6 @@ class Task extends Component {
             </li>
         );
     }
-
 }
-
 
 export default Task;

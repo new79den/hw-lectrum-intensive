@@ -1,4 +1,6 @@
+//Core
 import React, { Component } from 'react';
+// Instruments
 import Checkbox from '../../theme/assets/Checkbox';
 
 class Footer extends Component {
