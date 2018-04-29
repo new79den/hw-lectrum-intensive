@@ -20,6 +20,6 @@ export function* editTaskWorker ({ payload: task }) {
         }
         yield put(taskAction.editTaskSuccess(data[0]));
     } catch (error) {
-    } finally {
+        yield put(taskAction.editTaskFail(error));
     }
 }

@@ -18,8 +18,6 @@ export function* fetchTasksWorker () {
 
         yield put(taskAction.fetchTasksSuccess(tasks));
     } catch (error) {
-
-    } finally {
-
+        yield put(taskAction.fetchTasksFail(error));
     }
 }

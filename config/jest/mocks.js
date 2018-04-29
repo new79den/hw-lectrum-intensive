@@ -91,6 +91,12 @@ const fetchResponseSuccess = {
     json: jest.fn(Promise.resolve(responseDataSuccess)),
 };
 
+const fetchResponseSuccess_204 = {
+    status: 204,
+    json: jest.fn(Promise.resolve(responseDataSuccess)),
+};
+
+
 const fetchResponseFail = {
     status: 401,
     json: jest.fn(Promise.resolve(responseDataFall)),
@@ -106,5 +112,6 @@ global.__ = {
     responseDataSuccess,
     fetchResponseSuccess,
     fetchResponseFail,
-    responseDataFall
+    responseDataFall,
+    fetchResponseSuccess_204
 };
