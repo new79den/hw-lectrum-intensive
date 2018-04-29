@@ -33,8 +33,6 @@ export function* chooseAllTasksWorker ({ payload: status }) {
 
         yield put(taskAction.chooseAllTasksSuccess(data));
     } catch (error) {
-
-    } finally {
-
+        yield put(taskAction.chooseAllTaskFail(error));
     }
 }

@@ -35,12 +35,9 @@ export const filterTasks  = (tasks) => {
     return List([...favorite, ...data, ...completed]);
 };
 
-export const filterSearch = (tasks, searchText) => {
-    return tasks.filter((e) => e.get('message')
-        .toLocaleLowerCase()
-        .includes(searchText.toLocaleLowerCase()));
-};
-
+export const filterSearch = (tasks, searchText) => tasks.filter((e) => e.get('message')
+    .toLocaleLowerCase()
+    .includes(searchText.toLocaleLowerCase()));
 
 class SchedulerComponent extends Component {
     componentDidMount () {

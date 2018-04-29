@@ -23,7 +23,7 @@ class Form extends Component {
 
         if (message.trim()) {
 
-            addTask({"message": message});
+            addTask({ message });
             this.setState(() => ({
                 message: '',
             }));
@@ -42,6 +42,7 @@ class Form extends Component {
 
     render () {
         const { message } = this.state;
+
         return (
             <form>
                 <div>

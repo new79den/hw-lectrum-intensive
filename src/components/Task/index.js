@@ -30,7 +30,7 @@ class Task extends Component {
         const message = task.get('message');
 
         if (!completed) {
-            if (isShowEdit && editMessage !== message) {
+            if (isShowEdit && editMessage !== message && editMessage) {
                 this._handleEditTask('message');
             } else {
                 this.setState({
@@ -59,13 +59,6 @@ class Task extends Component {
         const { actions, task } = this.props;
 
         actions.deleteTask(task.get('id'));
-    };
-
-    _handleEditCompleted = () => {
-        const { task } = this.props;
-
-        Object.assign(task, { completed: !task.completed });
-        this._changeGlobalStateTasks('EDIT');
     };
 
     _editMessage = (event) => {
